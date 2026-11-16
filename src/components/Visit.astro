@@ -1,0 +1,63 @@
+---
+import { Image } from "astro:assets";
+import teamImg from "../assets/team.jpg";
+import { steps } from "../data/site";
+---
+<section id="pryiom" class="section visit">
+  <div class="container">
+    <div class="section__head">
+      <h2>Як проходить перший прийом</h2>
+    </div>
+    <ol class="steps" role="list">
+      {steps.map((s, i) => (
+        <li class="step" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+          <span class="step__dot" aria-hidden="true"></span>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="muted">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="visit__close">
+      <p class="visit__claim">Без медикаментозного впливу і без хірургії.</p>
+      <figure class="visit__photo">
+        <Image src={teamImg} alt="Вікторія Арсентьєва з колегою в білих медичних костюмах центру" widths={[400, 702]} sizes="(min-width: 64rem) 34vw, 100vw" loading="lazy" />
+        <figcaption class="small muted">Вікторія Арсентьєва (ліворуч) з колегою.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .visit { padding-block: var(--space-3xl); }
+  .steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: step; position: relative; }
+  .step { position: relative; display: grid; gap: var(--space-xs); padding: 0 0 var(--space-xl) var(--space-xl); counter-increment: step; }
+  .step::before {
+    content: ""; position: absolute; left: 7px; top: 8px; bottom: 0; width: var(--line-thin); background: var(--color-primary);
+  }
+  .step:last-child::before { display: none; }
+  .step__dot {
+    position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--color-bg); border: var(--line-strong) solid var(--color-primary);
+  }
+  .step__title { font-size: var(--text-h3); }
+  .step__title::before { content: counter(step) ". "; color: var(--color-muted); }
+  .visit__close { display: grid; gap: var(--space-xl); margin-top: var(--space-xl); align-items: end; }
+  .visit__claim {
+    font-family: var(--font-display); font-weight: 500; font-size: var(--text-h2); line-height: 1.1;
+    letter-spacing: -0.015em; color: var(--color-primary); max-width: 16ch;
+  }
+  .visit__photo { margin: 0; display: grid; gap: var(--space-xs); }
+  .visit__photo :global(img) { width: 100%; height: auto; border-radius: var(--radius-lg); background: var(--color-well); }
+
+  @media (min-width: 64rem) {
+    .visit { padding-block: 160px; }
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+    .step { padding: var(--space-xl) var(--space-md) 0 0; }
+    .step::before { left: 0; right: calc(-1 * var(--gap)); top: 7px; bottom: auto; width: auto; height: var(--line-thin); }
+    .step:last-child::before { display: block; right: 0; }
+    .step__dot { top: 0; }
+    .visit__close { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); margin-top: 120px; }
+    .visit__claim { font-size: clamp(3rem, 2rem + 2.6vw, 4rem); }
+  }
+</style>

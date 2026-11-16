@@ -1,0 +1,213 @@
+---
+// Шкала життя (concept §4–5): stages × two specialists × price. Native radio buttons, works without JS
+// (the answer of the checked stage is shown by CSS). Desktop ≥48rem: horizontal ruler, answer on the right
+// (≥64rem) or below; phone: vertical list, the answer opens under the stage.
+import { Image } from "astro:assets";
+import arsImg from "../assets/arsentieva.png";
+import tarImg from "../assets/tarasova.png";
+import { stages } from "../data/site";
+
+const nb = (s: string) => s.replace(/ (?=грн)/g, " ");
+const markerRules = stages
+  .map((s, i) => `.scale:has(#st-${s.id}:checked){--pos:${i}}`)
+  .join("");
+---
+<fieldset class="scale" aria-describedby="scale-hint">
+  <legend class="visually-hidden">Шкала життя: оберіть вік або стан</legend>
+  <p class="scale__hint small muted" id="scale-hint">Оберіть вік або стан, щоб побачити, хто приймає і скільки коштує прийом.</p>
+
+  <div class="scale__marker" aria-hidden="true"></div>
+
+  {stages.map((s, i) => (
+    <div class="stage" data-a={s.arsentieva} data-t={s.tarasova} style={`--i:${i}`}>
+      <input class="stage__input" type="radio" name="life-stage" id={`st-${s.id}`} value={s.id} checked={i === 0} />
+      <label class="stage__label" for={`st-${s.id}`} style={`grid-column:${i + 1}`}>{s.label}</label>
+      <div class="stage__answer">
+        <p class="ans__title">{s.label}</p>
+        <dl class="ans">
+          {s.offers.map((o) => (
+            <div class="ans__row">
+              <dt>{o.who}</dt>
+              <dd class="muted">{o.detail}</dd>
+              {o.price && <dd class="ans__price num">{nb(o.price)}</dd>}
+            </div>
+          ))}
+        </dl>
+        {s.note && <p class="small muted ans__note">{s.note}</p>}
+        <a class="link ans__more" href="#tsiny">Усі ціни</a>
+      </div>
+    </div>
+  ))}
+
+  <div class="line line--a" aria-hidden="true">
+    <span class="line__bar"></span>
+    <Image class="line__face" src={arsImg} alt="Вікторія Арсентьєва" width={48} height={48} densities={[1, 2]} fit="cover" position="top" loading="eager" />
+    <span class="line__cap">Арсентьєва В.М., магістр остеопатії</span>
+  </div>
+  <div class="line line--t" aria-hidden="true">
+    <span class="line__bar"></span>
+    <Image class="line__face" src={tarImg} alt="Ольга Тарасова" width={48} height={48} densities={[1, 2]} fit="cover" position="top" loading="eager" />
+    <span class="line__cap">Тарасова О.В., остеопат, з 15 років</span>
+  </div>
+  <div class="line line--t2" aria-hidden="true"><span class="line__bar"></span></div>
+
+  <p class="visually-hidden">
+    Арсентьєва В.М. приймає на всіх етапах: немовлят, дітей до 7 років і від 7 до 18 років, вагітних, дорослих і людей старшого віку.
+    Тарасова О.В. приймає дітей з 15 років, дорослих і людей старшого віку.
+  </p>
+</fieldset>
+<style is:inline set:html={markerRules}></style>
+
+<style>
+  .scale {
+    --col-gap: 8px;
+    border: 0; margin: 0; padding: 0; min-width: 0; min-inline-size: 0;
+    position: relative;
+  }
+  .scale__hint { margin-bottom: var(--space-md); }
+
+  .stage__input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .stage__label {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; min-height: 48px; padding: var(--space-xs) var(--space-sm);
+    font-weight: 600; font-size: 1rem; line-height: 1.25; color: var(--color-text);
+    cursor: pointer; user-select: none; border-radius: var(--radius);
+    transition: color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+  }
+  .stage__label:hover { color: var(--color-primary); }
+  .stage__input:checked + .stage__label { color: var(--color-accent); }
+  .stage__input:focus-visible + .stage__label { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+
+  .ans__title { font-size: var(--text-small); color: var(--color-muted); margin-bottom: var(--space-xs); }
+  .ans { margin: 0; display: grid; gap: var(--space-md); }
+  .ans__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-md); align-items: baseline; }
+  .ans__row dt { font-weight: 600; grid-column: 1; }
+  .ans__row dd { margin: 0; grid-column: 1; font-size: 1rem; }
+  .ans__row .ans__price {
+    grid-column: 2; grid-row: 1 / span 2; align-self: center;
+    font-family: var(--font-display); font-weight: 500; font-size: var(--text-h3); color: var(--color-text);
+    white-space: nowrap;
+  }
+  .ans__note { margin-top: var(--space-sm); }
+  .ans__more { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--space-xs); }
+
+  .line__face {
+    width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: 50% 15%;
+    background: var(--color-well); box-shadow: 0 0 0 3px var(--color-bg); flex-shrink: 0;
+  }
+  .line__cap { font-size: var(--text-small); font-weight: 600; color: var(--color-text); }
+  .line__bar { display: block; background: var(--color-primary); transform-origin: left center; }
+  .line--a .line__bar { height: var(--line-strong); }
+  .line--t .line__bar, .line--t2 .line__bar { height: var(--line-thin); }
+
+  /* ---------- Phone: vertical ruler ---------- */
+  @media (max-width: 47.99rem) {
+    .scale { display: flex; flex-direction: column; }
+    /* Legend (who is which line) on top */
+    .line { order: -1; display: grid; grid-template-columns: 48px 40px minmax(0, 1fr); align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+    .line .line__face { grid-column: 1; grid-row: 1; }
+    .line .line__bar { grid-column: 2; grid-row: 1; }
+    .line .line__cap { grid-column: 3; grid-row: 1; }
+    .line--t { margin-bottom: var(--space-lg); }
+    .scale__hint { order: -2; }
+    .scale__marker, .line.line--t2, .ans__title { display: none; }
+
+    .stage { position: relative; padding-left: 52px; }
+    .stage::before, .stage::after {
+      content: ""; position: absolute; top: 0; bottom: 0; background: var(--color-primary); transform-origin: top center;
+    }
+    .stage::before { left: 14px; width: var(--line-strong); }
+    .stage::after { left: 30px; width: var(--line-thin); }
+    .stage[data-t="none"]::after { display: none; }
+    .stage[data-t="from15"]::after { top: 30px; }
+    .stage:has(#st-pregnancy)::after { display: block; width: 0; background: none; border-left: var(--line-thin) dashed var(--color-muted); }
+    .stage:first-of-type::before { top: 8px; }
+    .stage__label { margin-left: calc(-1 * var(--space-sm)); padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); border-radius: 0; }
+    .stage__input:checked + .stage__label { background: transparent; }
+    .stage__input:checked + .stage__label::before {
+      content: ""; position: absolute; left: -46px; top: 50%; width: 12px; height: 12px; transform: translateY(-50%);
+      border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 0 3px var(--color-bg);
+    }
+    .stage__answer { padding: var(--space-md) 0 var(--space-lg); }
+    .stage__input:not(:checked) ~ .stage__answer { display: none; }
+  }
+
+  /* ---------- ≥48rem: horizontal ruler ---------- */
+  @media (min-width: 48rem) {
+    .scale {
+      display: grid; column-gap: var(--col-gap); row-gap: 0;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-rows: auto auto 72px 72px auto;
+    }
+    .scale__hint { grid-row: 1; grid-column: 1 / -1; }
+    .stage { display: contents; }
+    .stage__label { grid-row: 2; justify-content: flex-start; min-height: 52px; border-radius: var(--radius) var(--radius) 0 0; }
+    .scale__marker {
+      grid-row: 2 / 5; grid-column: 1; z-index: 0;
+      background: var(--color-well); border-radius: var(--radius);
+      border-top: 3px solid var(--color-accent);
+      transform: translateX(calc(var(--pos, 0) * (100% + var(--col-gap))));
+    }
+    .line { grid-row: 3; grid-column: 1 / 7; position: relative; z-index: 1; }
+    .line--t { grid-row: 4; grid-column: 3 / 5; --c: calc((100% - var(--col-gap)) / 2); }
+    .line--t2 { grid-row: 4; grid-column: 5 / 7; position: relative; z-index: 1; }
+    .line__bar { position: absolute; left: 0; right: 0; top: 46px; }
+    /* 15 years inside the 7–18 stage: (15 − 7) / 11; the line stops at the end of that column, dashed over «Вагітність» */
+    .line--t .line__bar { left: calc(var(--c) * 0.727); right: calc(var(--c) + var(--col-gap)); }
+    .line--t::before {
+      content: ""; position: absolute; top: 47px; left: calc(var(--c) + var(--col-gap)); width: var(--c);
+      border-top: var(--line-thin) dashed var(--color-muted);
+    }
+    .line--t::after {
+      content: "не приймає вагітних"; position: absolute; top: 54px; left: calc(var(--c) + var(--col-gap)); width: var(--c);
+      font-size: var(--text-small); line-height: 1.2; color: var(--color-muted);
+    }
+    .line__face { position: absolute; top: 24px; left: 0; }
+    .line--t .line__face { left: calc(var(--c) * 0.727 - 24px); top: 23px; }
+    .line--a .line__face { top: 24px; }
+    .line__cap { position: absolute; left: 60px; top: 8px; white-space: nowrap; }
+    .line--t .line__cap { left: calc(var(--c) * 0.727 + 34px); }
+    .line--a .line__bar { top: 46px; }
+    .line--t .line__bar, .line--t2 .line__bar { top: 47px; }
+
+    .stage__answer {
+      grid-row: 5; grid-column: 1 / -1;
+      padding-top: var(--space-lg); max-width: 36rem;
+    }
+    .stage__input:not(:checked) ~ .stage__answer { visibility: hidden; }
+  }
+  @media (min-width: 64rem) {
+    .scale {
+      grid-template-columns: repeat(6, minmax(0, 1fr)) minmax(0, 22rem);
+      grid-template-rows: auto 52px 72px 72px auto;
+    }
+    .stage__answer {
+      grid-row: 2 / 5; grid-column: 7; max-width: none; align-self: start; /* overflow is free: does not stretch the hero */
+      padding: var(--space-md) 0 0 var(--space-xl); margin-left: var(--space-md);
+      border-left: 1px solid var(--color-rule);
+    }
+  }
+
+  /* ---------- Motion (concept «Движение» 1, 2) ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 48rem) {
+      .scale__marker { transition: transform 320ms var(--ease-out); }
+      .line__bar { animation: draw-x 800ms var(--ease-out) 200ms both; }
+      .line--t .line__bar, .line--t2 .line__bar { animation-delay: 320ms; }
+      .line__face { animation: face-in 420ms var(--ease-out) 120ms both; }
+      .line--t .line__face { animation-delay: 240ms; }
+    }
+    @media (min-width: 48rem) {
+      .stage__input:checked ~ .stage__answer { animation: answer-in var(--dur-short) var(--ease-out); }
+    }
+    @media (max-width: 47.99rem) {
+      .stage::before, .stage::after { animation: draw-y 600ms var(--ease-out) both; animation-delay: calc(var(--i) * 70ms); }
+      .stage__input:checked ~ .stage__answer { animation: fade-in 200ms var(--ease-out); }
+    }
+  }
+  @keyframes draw-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes draw-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes face-in { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+  @keyframes answer-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+</style>

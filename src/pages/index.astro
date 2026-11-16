@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Directions from "../components/Directions.astro";
+import Specialists from "../components/Specialists.astro";
+import Visit from "../components/Visit.astro";
+import Prices from "../components/Prices.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { contacts } from "../data/site";
+
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  name: "Центр остеопатії Арсентьєвої В.М.",
+  address: { "@type": "PostalAddress", streetAddress: "вул. Євгенія Єніна, 33", addressLocality: "Харків", addressCountry: "UA" },
+  openingHours: "Mo-Sa 09:00-18:00",
+  telephone: ["+380967770135", "+380631185617"],
+  sameAs: [...contacts.socials.map((s) => s.href), contacts.telegram.href],
+  employee: [
+    { "@type": "Physician", name: "Арсентьєва Вікторія Миколаївна", jobTitle: "Магістр остеопатії" },
+    { "@type": "Physician", name: "Тарасова Ольга Володимирівна", jobTitle: "Остеопат" },
+  ],
+};
+---
+<Base lang="uk" title="Остеопат у Харкові для дітей і дорослих, Центр Арсентьєвої" description="Остеопатія для немовлят, дітей, вагітних і дорослих у Харкові, вул. Євгенія Єніна, 33, та онлайн. Ціни від 800 грн. Запис за телефоном, Viber, Telegram.">
+  <script slot="head" type="application/ld+json" data-rec="SEO-R006,SMM-R009" is:inline set:html={JSON.stringify(ld)} />
+  <Header slot="header" />
+  <Hero />
+  <Directions />
+  <Specialists />
+  <Visit />
+  <Prices />
+  <Contact />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>
+<script src="../scripts/ui.ts"></script>
+<style is:global>
+  @media (max-width: 47.99rem) { body { padding-bottom: calc(var(--space-2xl) + var(--space-xs)); } }
+</style>

@@ -1,0 +1,85 @@
+/* Client layer on top of the neutral base: type, buttons, sections. Only tokens from tokens.css. */
+html { scroll-padding-top: var(--header-h); overflow-x: clip; scrollbar-color: var(--color-rule) var(--color-bg); }
+body { overflow-x: clip; }
+body {
+  font-size: var(--text-body); line-height: 1.6;
+  font-synthesis: none; -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--color-primary); color: var(--color-on-primary); }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; transition: none; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; color: var(--color-text); margin: 0; }
+h1 { font-size: var(--text-display); line-height: 1.04; letter-spacing: -0.02em; max-width: 20ch; }
+h2 { font-size: var(--text-h2); line-height: 1.1; letter-spacing: -0.015em; max-width: 24ch; }
+h3 { font-size: var(--text-h3); line-height: 1.2; letter-spacing: -0.01em; }
+p { margin: 0; max-width: 65ch; }
+.lead { font-size: var(--text-lead); line-height: 1.5; color: var(--color-text); }
+.muted { color: var(--color-muted); }
+.small { font-size: var(--text-small); line-height: 1.45; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+
+a { text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.link {
+  color: var(--color-primary); font-weight: 600; text-decoration: underline;
+  text-decoration-color: var(--color-rule);
+  transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out);
+}
+.link:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+/* Buttons: primary petrol, secondary outline, channel = icon + label */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 52px; padding: 0 var(--space-lg);
+  font: 600 1rem/1.2 var(--font-body); text-decoration: none; text-align: center;
+  border-radius: var(--radius); border: 1.5px solid transparent; cursor: pointer;
+  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.btn .icon { flex-shrink: 0; }
+.btn--primary { background: var(--color-primary); color: var(--color-on-primary); }
+.btn--primary:hover { background: var(--color-primary-deep); }
+.btn--secondary { background: transparent; color: var(--color-primary); border-color: var(--color-primary); }
+.btn--secondary:hover { background: var(--color-well); }
+.btn--sm { min-height: 44px; padding: 0 var(--space-md); }
+@media (prefers-reduced-motion: no-preference) {
+  .btn:active { transform: scale(0.98); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: scale(0.98); }
+}
+
+/* Sections: different densities between blocks (concept §5 «Сетка») */
+.section { padding-block: var(--space-2xl); }
+.section__head { display: grid; gap: var(--space-md); margin-bottom: var(--space-xl); }
+@media (min-width: 64rem) {
+  .section { padding-block: 120px; }
+  .section__head { margin-bottom: var(--space-2xl); }
+}
+
+/* FutureLink: quiet, inactive, dashed underline, note on hover and focus */
+.future-link {
+  color: var(--color-muted); font-weight: 400;
+  text-decoration: underline dashed var(--color-rule); text-decoration-thickness: 1px; text-underline-offset: 0.25em;
+  min-height: 44px;
+}
+.future-link:hover { color: var(--color-text); }
+.future-link__note[aria-hidden="true"] { font-family: var(--font-body); text-decoration: none; }
+
+/* Scroll reveal (effect 3): one reveal for the page, 12 px rise, 8 px on phones */
+[data-reveal] { transition-duration: var(--dur); }
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal]:not(.is-visible) { transform: translateY(12px); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 47.99rem) {
+  .js [data-reveal]:not(.is-visible) { transform: translateY(8px); }
+}
+
+/* Notes of FutureLink stay inside the screen: anchored to the start, to the end near the right edge */
+.future-link .future-link__note[aria-hidden="true"] { left: 0; transform: translateY(-4px); }
+.future-link:hover .future-link__note, .future-link:focus-visible .future-link__note { transform: translateY(0); }
+.future-link.hdr__lang .future-link__note[aria-hidden="true"], .ftr__nav li:last-child .future-link__note[aria-hidden="true"] { left: auto; right: 0; }
+
+/* States: inactive elements (FutureLink) and native disabled controls */
+[aria-disabled="true"] { cursor: default; }
+:disabled, .btn:disabled { opacity: 0.55; cursor: not-allowed; }

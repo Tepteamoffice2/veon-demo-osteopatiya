@@ -1,0 +1,32 @@
+---
+// Phone only: call · Viber · Telegram under the thumb after the first screen (concept «Движение» 5, R-UX-05).
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<nav class="mbar" aria-label="Швидкий зв'язок" data-rec="R-UX-05" data-mbar>
+  <a class="mbar__btn" href={contacts.phones[0].href}><Icon name="phone" size={20} /><span>Подзвонити</span></a>
+  <a class="mbar__btn" href={contacts.viber.href}><Icon name="viber" size={20} /><span>Viber</span></a>
+  <a class="mbar__btn" href={contacts.telegram.href} rel="noopener"><Icon name="telegram" size={20} /><span>Telegram</span></a>
+</nav>
+
+<style>
+  .mbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky);
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2xs);
+    padding: var(--space-xs) var(--space-xs) calc(var(--space-xs) + env(safe-area-inset-bottom));
+    background: var(--color-primary-deep);
+  }
+  :global(.js) .mbar { transform: translateY(110%); transition: transform 260ms var(--ease-out); }
+  :global(.js) .mbar.is-shown { transform: none; }
+  .mbar__btn {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 48px;
+    color: var(--color-on-primary); font-weight: 600; font-size: 0.9375rem; text-decoration: none; border-radius: var(--radius);
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .mbar__btn :global(.icon) { color: var(--color-gold); flex-shrink: 0; }
+  .mbar__btn:hover { background: var(--color-primary); }
+  .mbar__btn:focus-visible { outline-color: var(--color-gold); outline-offset: -3px; }
+  @media (max-width: 22rem) { .mbar__btn { font-size: 0.8125rem; gap: var(--space-2xs); } }
+  @media (min-width: 48rem) { .mbar { display: none; } }
+  @media (prefers-reduced-motion: reduce) { :global(.js) .mbar { transition: none; } }
+</style>

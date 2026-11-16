@@ -1,0 +1,62 @@
+---
+import FutureLink from "./FutureLink.astro";
+import MiniScale from "./MiniScale.astro";
+import { FUTURE } from "../data/site";
+
+const list = [
+  { title: "Вагітність і після пологів", text: "Приймає Арсентьєва В.М.: остеопатія в гінекології та акушерстві, відновлення після пологів.", mark: [3] },
+  { title: "Реабілітація після операцій і травм", text: "Відновлення після операцій, травм, при сколіозі, хронічному та головному болю." },
+  { title: "Онлайн-консультація", text: "Якщо ви не в Харкові: первинна консультація онлайн і пакети сеансів." },
+  { title: "Устілки FormTotics", text: "Індивідуальні ортопедичні устілки: виготовлення і корекція через місяць." },
+];
+---
+<section id="napriamky" data-rec="R-UX-02" class="section dir">
+  <div class="container">
+    <div class="section__head">
+      <h2>З чим звертаються до центру</h2>
+      <p class="lead muted">Оберіть свою ситуацію: від немовлят до старшого віку.</p>
+    </div>
+
+    <div class="dir__wells">
+      <article class="well well--kids" data-reveal>
+        <h3>Немовлята і діти</h3>
+        <p class="well__big">від немовлят до&nbsp;18&nbsp;років</p>
+        <MiniScale mark={[0, 1, 2]} />
+        <p class="muted">Дитяча остеопатія за віком, зокрема при затримці мовленнєвого розвитку, заїканні, ДЦП.</p>
+        <FutureLink note={FUTURE}>Детальніше про дитячу остеопатію</FutureLink>
+      </article>
+      <article class="well" data-reveal style="--reveal-delay:60ms">
+        <h3>Біль у спині та суглобах</h3>
+        <p class="muted">Хребет і суглоби, сколіоз, головний біль. Без медикаментозного впливу і без хірургії.</p>
+        <FutureLink note={FUTURE}>Детальніше</FutureLink>
+      </article>
+    </div>
+
+    <ul class="dir__list" role="list">
+      {list.map((d, i) => (
+        <li class="dir__item" data-reveal style={`--reveal-delay:${(i + 2) * 60}ms`}>
+          <h3 class="dir__title">{d.title}</h3>
+          <p class="muted">{d.text}</p>
+          {d.mark && <MiniScale mark={d.mark} />}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .dir__wells { display: grid; gap: var(--space-md); grid-template-columns: minmax(0, 1fr); }
+  .well {
+    display: grid; gap: var(--space-md); align-content: start;
+    background: var(--color-well); border-radius: var(--radius-lg); padding: var(--space-lg);
+  }
+  .well__big { font-family: var(--font-display); font-weight: 500; font-size: var(--text-h2); line-height: 1.1; color: var(--color-primary); }
+  .dir__list { margin: var(--space-xl) 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--space-xl); }
+  .dir__item { display: grid; gap: var(--space-xs); padding-block: var(--space-lg); border-top: 1px solid var(--color-rule); }
+  .dir__title { font-size: var(--text-h3); }
+  @media (min-width: 48rem) {
+    .dir__wells { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gap); }
+    .well { padding: var(--space-xl); }
+    .dir__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

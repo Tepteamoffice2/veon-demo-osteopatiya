@@ -1,0 +1,74 @@
+---
+import Icon from "./Icon.astro";
+import LifeScale from "./LifeScale.astro";
+import { contacts } from "../data/site";
+---
+<section id="hero" data-rec="R-UX-01" class="hero">
+  <div class="container hero__grid">
+    <h1 class="hero__title">Остеопатія<br class="br-lg" /> для немовлят, дітей<br class="br-lg" /> і дорослих у Харкові</h1>
+    <div class="hero__aside">
+      <p class="lead hero__lead">Приймаємо також вагітних. Очно на вул. Євгенія Єніна, 33 та онлайн.</p>
+      <a class="btn btn--primary hero__cta" href="#zapys">Записатися на прийом</a>
+      <ul class="hero__channels" data-rec="MA-R006,SEO-R009" role="list" aria-label="Зв'язатися зараз">
+        <li>
+          <a class="chan" href={contacts.phones[0].href}>
+            <Icon name="phone" size={20} />
+            <span class="chan__short">Подзвонити</span>
+            <span class="chan__full num">{contacts.phones[0].label}</span>
+          </a>
+        </li>
+        <li><a class="chan" href={contacts.viber.href}><Icon name="viber" size={20} /><span>Viber</span></a></li>
+        <li><a class="chan" href={contacts.telegram.href} rel="noopener"><Icon name="telegram" size={20} /><span>Telegram</span></a></li>
+      </ul>
+    </div>
+    <div class="hero__scale">
+      <LifeScale />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: var(--space-lg) var(--space-2xl); }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
+  .hero__title { max-width: 14ch; }
+  .br-lg { display: none; }
+  .hero__aside { display: grid; gap: var(--space-md); align-content: end; }
+  .hero__lead { max-width: 34ch; }
+  .hero__cta { width: 100%; }
+  .hero__channels {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs);
+    margin: 0; padding: 0; list-style: none;
+  }
+  .chan {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-xs);
+    min-height: 48px; padding: 0 var(--space-xs);
+    border: 1.5px solid var(--color-rule); border-radius: var(--radius);
+    color: var(--color-primary); font-weight: 600; font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
+    transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+  }
+  .chan:hover { border-color: var(--color-primary); background: var(--color-well); }
+  .chan :global(.icon) { flex-shrink: 0; }
+  .chan__full { display: none; }
+  .hero__scale { margin-top: var(--space-xl); }
+  @media (prefers-reduced-motion: no-preference) { .chan:active { transform: scale(0.98); } }
+  @media (max-width: 47.99rem) { .chan { flex-direction: column; gap: var(--space-2xs); min-height: 60px; padding: var(--space-xs) var(--space-2xs); font-size: 0.875rem; } }
+
+  @media (min-width: 48rem) {
+    .hero { padding-block: var(--space-xl) var(--space-lg); }
+    .hero__cta { width: auto; justify-self: start; }
+    .hero__channels { grid-template-columns: auto auto auto; justify-content: start; }
+    .chan { padding: 0 var(--space-md); }
+  }
+  @media (min-width: 64rem) {
+    .hero { padding-block: var(--space-2xl) 0; }
+    .hero__grid { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); column-gap: var(--space-xl); row-gap: 0; }
+    .hero__title { max-width: none; align-self: end; }
+    .br-lg { display: inline; }
+    .hero__aside { align-self: end; padding-bottom: var(--space-xs); }
+    .hero__cta { width: 100%; }
+    .hero__channels { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); }
+    .chan__short { display: none; }
+    .chan__full { display: inline; }
+    .hero__scale { grid-column: 1 / -1; margin-top: var(--space-2xl); }
+  }
+</style>

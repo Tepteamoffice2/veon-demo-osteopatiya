@@ -1,0 +1,104 @@
+---
+import { Image } from "astro:assets";
+import FutureLink from "./FutureLink.astro";
+import MiniScale from "./MiniScale.astro";
+import arsImg from "../assets/arsentieva.png";
+import tarImg from "../assets/tarasova.png";
+import { FUTURE } from "../data/site";
+
+const education = [
+  { year: "1991", text: "Харківське медичне училище" },
+  { year: "2005", text: "Харківська державна академія фізичної культури, реабілітолог" },
+  { year: "2015", text: "Чеська академія остеопатії, Прага, магістр остеопатії" },
+];
+const certs = [
+  "Інститут Апледжера: краніосакральна терапія 1 і 2, соматоемоційне звільнення 1 і 2",
+  "Інститут Бараля: VM-1",
+  "Остеопатія в гінекології та акушерстві",
+  "Державний сертифікат підвищення кваліфікації медпрацівників",
+];
+---
+<section id="fakhivtsi" data-rec="R-UX-04" class="section spec">
+  <div class="container">
+    <div class="section__head">
+      <h2>Хто вас прийме</h2>
+      <p class="lead muted">Дві фахівчині, у кожної свій вік пацієнтів.</p>
+    </div>
+
+    <article class="person person--main" data-reveal>
+      <div class="person__photo">
+        <Image src={arsImg} alt="Арсентьєва Вікторія Миколаївна" widths={[300]} sizes="(min-width: 48rem) 300px, 70vw" />
+      </div>
+      <div class="person__body">
+        <div class="person__name">
+          <h3>Арсентьєва Вікторія Миколаївна</h3>
+          <p class="muted">Магістр остеопатії, засновниця центру</p>
+        </div>
+        <div class="person__block">
+          <p class="person__label">Кого приймає</p>
+          <MiniScale mark={[0, 1, 2, 3, 4, 5]} />
+          <p class="small muted">Також спортсменів.</p>
+        </div>
+        <div class="person__block">
+          <p class="person__label">Освіта</p>
+          <dl class="edu">
+            {education.map((e) => (<div class="edu__row"><dt class="num">{e.year}</dt><dd>{e.text}</dd></div>))}
+          </dl>
+        </div>
+        <div class="person__block">
+          <p class="person__label">Навчання і сертифікати</p>
+          <ul class="certs">{certs.map((c) => <li>{c}</li>)}</ul>
+          <FutureLink note={FUTURE}>Усі сертифікати</FutureLink>
+        </div>
+      </div>
+    </article>
+
+    <article class="person person--second" data-reveal>
+      <div class="person__photo">
+        <Image src={tarImg} alt="Тарасова Ольга Володимирівна" widths={[300]} sizes="(min-width: 48rem) 240px, 60vw" />
+      </div>
+      <div class="person__body">
+        <div class="person__name">
+          <h3>Тарасова Ольга Володимирівна</h3>
+          <p class="muted">Остеопат</p>
+        </div>
+        <div class="person__block">
+          <p class="person__label">Кого приймає</p>
+          <MiniScale mark={[2, 4, 5]} who="t" />
+          <p class="small muted">Дітей з 15 років, дорослих і людей старшого віку.</p>
+        </div>
+        <FutureLink note={FUTURE}>Сертифікати</FutureLink>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .person { display: grid; gap: var(--space-lg); grid-template-columns: minmax(0, 1fr); }
+  .person + .person { margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 1px solid var(--color-rule); }
+  .person__photo {
+    background: var(--color-well); border-radius: var(--radius-lg); overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: center; padding-top: var(--space-lg);
+    max-width: 360px;
+  }
+  .person__photo :global(img) { width: 100%; height: auto; }
+  .person__body { display: grid; gap: var(--space-lg); align-content: start; min-width: 0; }
+  .person__name { display: grid; gap: var(--space-2xs); }
+  .person__block { display: grid; gap: var(--space-sm); }
+  .person__label { font-weight: 600; font-size: 1rem; }
+  .edu { margin: 0; display: grid; }
+  .edu__row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: var(--space-md); padding-block: var(--space-sm); border-top: 1px solid var(--color-rule); }
+  .edu__row dt { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; color: var(--color-primary); }
+  .edu__row dd { margin: 0; }
+  .certs { margin: 0; padding-left: 1.1em; display: grid; gap: var(--space-xs); }
+  .certs li::marker { color: var(--color-primary); }
+  .person--second .person__photo { max-width: 260px; }
+
+  @media (min-width: 48rem) {
+    .person--main { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-2xl); }
+    .person--main .person__photo { max-width: none; align-self: start; }
+    .person--second { grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: var(--space-2xl); margin-left: auto; max-width: 960px; }
+    .person--second .person__photo { order: 2; max-width: none; align-self: start; }
+    .person--second .person__body { order: 1; }
+  }
+</style>

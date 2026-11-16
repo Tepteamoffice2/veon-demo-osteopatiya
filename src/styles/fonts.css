@@ -1,0 +1,11 @@
+/* Self-hosted fonts (@fontsource, SIL OFL): only the weights in use, cyrillic + latin subsets, font-display: swap.
+   Piazzolla 500 (display), Golos Text 400/600 (body). */
+@import "@fontsource/piazzolla/cyrillic-500.css";
+@import "@fontsource/piazzolla/latin-500.css";
+@import "@fontsource/golos-text/cyrillic-400.css";
+@import "@fontsource/golos-text/latin-400.css";
+@import "@fontsource/golos-text/cyrillic-600.css";
+@import "@fontsource/golos-text/latin-600.css";
+
+/* Metric-adjusted fallback: the swap from Georgia to Piazzolla does not move the layout */
+@font-face { font-family: "Piazzolla Fallback"; src: local("Georgia"); size-adjust: 94%; ascent-override: 98%; descent-override: 26%; line-gap-override: 0%; }

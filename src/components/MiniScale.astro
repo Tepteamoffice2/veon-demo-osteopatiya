@@ -1,0 +1,26 @@
+---
+// A short piece of the life ruler: six stages, the confirmed ones are marked (only where age is a fact, concept §5).
+import { stages } from "../data/site";
+interface Props { mark: number[]; who?: "a" | "t" }
+const { mark, who = "a" } = Astro.props;
+const names = stages.filter((_, i) => mark.includes(i)).map((s) => s.label.toLowerCase()).join(", ");
+---
+<div class:list={["mini", `mini--${who}`]} role="img" aria-label={`На шкалі життя: ${names}`}>
+  {stages.map((s, i) => (
+    <span class:list={["mini__seg", { "is-on": mark.includes(i) }]}>
+      <span class="mini__bar"></span>
+      <span class="mini__label">{s.label}</span>
+    </span>
+  ))}
+</div>
+
+<style>
+  .mini { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs) var(--space-2xs); }
+  @media (min-width: 64rem) { .mini { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .mini__seg { display: grid; gap: var(--space-2xs); min-width: 0; }
+  .mini__bar { height: var(--line-thin); background: var(--color-rule); }
+  .mini__seg.is-on .mini__bar { height: var(--line-strong); background: var(--color-primary); }
+  .mini__label { font-size: 0.75rem; line-height: 1.25; color: var(--color-muted); overflow-wrap: normal; }
+  .mini__seg.is-on .mini__label { color: var(--color-text); font-weight: 600; }
+  .mini--t .mini__seg.is-on .mini__bar { height: var(--line-thin); }
+</style>

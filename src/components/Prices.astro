@@ -1,0 +1,70 @@
+---
+import { prices } from "../data/site";
+const nb = (s: string) => s.replace(/ (?=грн)/g, " ");
+const [ars, ...rest] = prices;
+const groups = [ars, ...rest];
+---
+<section id="tsiny" data-rec="R-UX-03" class="section prices">
+  <div class="container">
+    <div class="section__head">
+      <h2>Скільки коштує прийом</h2>
+      <p class="lead muted">Ціна залежить від фахівця і віку пацієнта.</p>
+    </div>
+    <div class="prices__grid">
+      {groups.map((g, gi) => (
+        <section class:list={["pgroup", `pgroup--${g.id}`]} aria-labelledby={`${g.id}-h`} data-reveal style={`--reveal-delay:${gi * 60}ms`}>
+          <div class="pgroup__head">
+            {g.line && <span class:list={["pgroup__line", `pgroup__line--${g.line}`]} aria-hidden="true"></span>}
+            <h3 id={`${g.id}-h`} class="pgroup__title">{g.title}</h3>
+          </div>
+          <ul class="prow-list" role="list">
+            {g.rows.map((r) => (
+              <li class="prow">
+                <span class="prow__name">{r.name}</span>
+                {r.duration && <span class="prow__dur muted">{r.duration}</span>}
+                <span class="prow__price num">{nb(r.price)}</span>
+              </li>
+            ))}
+          </ul>
+          <a class="btn btn--secondary btn--sm pgroup__cta" href="#zapys">Записатися</a>
+        </section>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .prices__grid { display: grid; gap: var(--space-2xl); grid-template-columns: minmax(0, 1fr); }
+  .pgroup { display: grid; gap: var(--space-md); align-content: start; }
+  .pgroup__head { display: grid; gap: var(--space-sm); }
+  .pgroup__line { display: block; width: 64px; background: var(--color-primary); }
+  .pgroup__line--strong { height: var(--line-strong); }
+  .pgroup__line--thin { height: var(--line-thin); }
+  .pgroup__title { font-size: var(--text-h3); }
+  .prow-list { margin: 0; padding: 0; list-style: none; }
+  .prow {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-md); row-gap: var(--space-2xs);
+    align-items: baseline; padding-block: var(--space-md); border-top: 1px solid var(--color-rule);
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .prow:last-child { border-bottom: 1px solid var(--color-rule); }
+  .prow__name { grid-column: 1; font-weight: 600; }
+  .prow__dur { grid-column: 1; font-size: 1rem; }
+  .prow__price {
+    grid-column: 2; grid-row: 1 / span 2; align-self: center;
+    font-family: var(--font-display); font-weight: 500; font-size: var(--text-h3); white-space: nowrap; color: var(--color-text);
+  }
+  .pgroup__cta { justify-self: start; }
+  @media (hover: hover) { .prow:hover { background: var(--color-well); } }
+
+  @media (min-width: 64rem) {
+    .prices__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-3xl); row-gap: var(--space-2xl); }
+    .pgroup--p-arsentieva { grid-column: 1; grid-row: 1 / span 2; }
+    .pgroup--p-tarasova { grid-column: 2; grid-row: 1; }
+    .pgroup--p-online { grid-column: 2; grid-row: 2; }
+    .pgroup--p-insoles { grid-column: 1 / -1; grid-row: 3; }
+    .pgroup--p-insoles .prow-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-xl); }
+    .pgroup--p-insoles .prow:last-child { border-bottom: 0; }
+    .pgroup--p-insoles .prow { border-bottom: 1px solid var(--color-rule); }
+  }
+</style>

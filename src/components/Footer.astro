@@ -1,0 +1,41 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, FUTURE } from "../data/site";
+const future = ["Про центр", "Відгуки", "Блог", "Пацієнтам", "Політика конфіденційності", "Договір-оферта"];
+---
+<footer id="footer" class="ftr">
+  <div class="container ftr__grid">
+    <div class="ftr__brand">
+      <p class="ftr__name">Центр остеопатії Арсентьєвої В.М.</p>
+      <p class="small muted">{contacts.legal}</p>
+    </div>
+    <nav class="ftr__nav" aria-label="Інші розділи">
+      <ul role="list">
+        {future.map((f) => <li><FutureLink note={FUTURE}>{f}</FutureLink></li>)}
+      </ul>
+    </nav>
+    <a class="ftr__top" href="#top"><Icon name="up" size={18} />Нагору</a>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--color-well); padding-block: var(--space-xl); }
+  .ftr__grid { display: grid; gap: var(--space-lg); grid-template-columns: minmax(0, 1fr); align-items: center; }
+  .ftr__brand { display: grid; gap: var(--space-2xs); }
+  .ftr__name { font-family: var(--font-display); font-weight: 500; font-size: 1.125rem; color: var(--color-primary); }
+  .ftr__nav ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; column-gap: var(--space-lg); }
+  .ftr__nav :global(.future-link) { font-size: 1rem; }
+  @media (max-width: 47.99rem) {
+    .ftr__nav ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-md); }
+    .ftr__nav li:nth-child(even) :global(.future-link__note[aria-hidden="true"]) { left: auto; right: 0; }
+  }
+  .ftr__top {
+    display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; width: fit-content;
+    color: var(--color-primary); font-weight: 600; text-decoration: none;
+  }
+  .ftr__top:hover { color: var(--color-accent); }
+  @media (min-width: 64rem) {
+    .ftr__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) auto; gap: var(--space-xl); }
+  }
+</style>
